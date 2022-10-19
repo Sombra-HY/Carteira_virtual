@@ -1,15 +1,8 @@
-
-int sum(int x,int y){
-    return x+y;
-}
-
 //verefica se um valor esta presente em um vetor e retona 1 se sim ou 0 se nao (inteiros)
-int in (int valor,int *vetor,int tamVetor){
 
+int inINT (int valor,int *vetor,int tamVetor){
     int booleano = 0;
-
     for (int i = 0; i < tamVetor; ++i) {
-
         if ( vetor[i] == valor){
             booleano = 1;
             break;
@@ -17,6 +10,17 @@ int in (int valor,int *vetor,int tamVetor){
     }
     return booleano;
 }
+int inCHAR (char valor,char *vetor,int tamVetor){
+    int booleano = 0;
+    for (int i = 0; i < tamVetor; ++i) {
+        if ( vetor[i] == valor){
+            booleano = 1;
+            break;
+        }
+    }
+    return booleano;
+}
+
 
 // printa uma lista
 void print_vetor_s(int *vetor,int tam){
