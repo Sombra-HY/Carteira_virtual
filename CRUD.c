@@ -5,4 +5,20 @@
 */
 
 
+void binario(){
+
+    char var[20];
+
+    char c[10]="aa123";
+    FILE *arq = fopen("teste.txt","bw");
+    fwrite(c,6,sizeof(char),arq);
+    fclose(arq);
+
+    arq = fopen("teste.txt","r");
+    fread(var, sizeof(var),10,arq);
+    printf("%s",var);
+    fclose(arq);
+
+
+}
 
