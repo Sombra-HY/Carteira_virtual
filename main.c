@@ -1,63 +1,36 @@
 #include <stdio.h>
 #include "string.h"
-#include "funcoes.c"
-#include "CRUD.c"
-struct dados {
-    double saldo;
-    double desconto;
-    int dia;
-    int mes;
-    int ano;
-    int hora;
-    int minuto;
-    int segundo;
-    char categoria[30];
-    char descricao[200];
-};
+#include "funcoes.h"
 
 
-int Extrato(){
-    printf("Estrato");
-    return 1;
-}
+
+
+
+//int Extrato(){
+//
+//    int x;
+//    char cat[30];
+//
+//    printf("----------------Extrato------------------\n\nEscolha uma das opcoes abaixo:\n\n");
+//    printf("[1] - Escolher Categoria - (1 mes)\n[2] - Completo - (12 mes)\n:");
+//    scanf("%d",&x);
+//    if(x==1){
+//        printf("escolha uma categoria: ");
+//        scanf("%s",&cat);
+//
+//        //funcao que chama que entrega o extrato
+//        printf("-------------%s---------------\n",cat);
+//    }
+//    else if(x==2){
+//
+//    }
+//
+//    return 1;
+//}
+
 int Transferencia(){
     printf("Transferencia");
     return 1;
-}
-
-double procura_saldo() {
-    /* esta funcao procura o saldo no arquivo binario
-      primeiro abro o arquivo, caso ele nao exista eu crio ele,
-      apos isso leio o primeiro "struct" (quantidade de dados) no arquivo
-    */
-    FILE *arq = fopen("arquivo.txt", "ab");
-    fclose(arq);
-
-    struct dados valor;
-    int var;
-    double saldo;
-    int cont=0;
-
-    arq = fopen("arquivo.txt", "rb");
-    var = fread(&valor, 1, sizeof(valor), arq);
-    fclose(arq);
-
-    /* o fread retorna 0 se nao tiver nada no arquivo, por isso
-        verifico se o retorno for 0, retorno o saldo de R$ 0.00,
-        caso contrario leio o struct e retono o ultimo saldo neste
-    */
-    if (var == 0) {
-        return 0;
-    } else {
-        arq = fopen("arquivo.txt", "rb");
-        while(!feof(arq)){
-            cont++;
-            fread(&valor,sizeof(valor),1,arq);
-        }
-        fclose(arq);
-
-        return valor.saldo;
-    }
 }
 
 void Saldo(int *x){
@@ -115,6 +88,18 @@ int teste(){
 
         if (v == 1) {
             Saldo(&x);
+        }
+        if (v==2){
+            imprime_arq();
+        }
+        if (v==3){
+            Transferencia();
+        }
+        if (v==4){
+            adicionar_rea(-1);
+        }
+        if (v==5){
+            adicionar_rea(1);
         }
     }
 
