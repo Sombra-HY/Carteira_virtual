@@ -151,26 +151,36 @@ void adicionar_rea(int valor){
     }
 }
 
-void imprime_arq(){
-    struct data{
-        int dia;
-        int mes;
-        int ano;
-    };
-    struct data auxiliar;
+void imprime_arq(int Qmes){
+    struct tm *p;
+    time_t seconds;
+    time(&seconds);
+    p = localtime(&seconds);
+    struct dados dados;
+
+    // data atual
+    dados.dia = p->tm_mday;
+    dados.mes = p->tm_mon + 1;
+    dados.ano = p->tm_year + 1900;
+    dados.hora = p->tm_hour;
+    dados.minuto = p->tm_min;
+    dados.segundo = p->tm_sec;
 
     struct dados valor;
-    char *str ;
 
     FILE *arq = fopen("arquivo.txt", "rb");
 
+    // So pode imprimir valores em que o  arquivo (mes + (ano * 12)) >= atual (mes + (ano * 12) - Qmes)
+    // neste caso os dias nao sao contabilizados
+
     while(fread(&valor, 1, sizeof(valor), arq)){
-        str = (valor.desconto>0?"quantia adicionada: + ":"Quantia Retirada: - ");
-        printf("\n_____________%d/%d/%d_____________\n"
-               "%c %.2lf\n"
-               "categoria : %s\n"
-               "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
-        Sleep(1000);
+        if ((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes){
+            printf("\n_____________%d/%d/%d_____________\n"
+                   "%c %.2lf\n"
+                   "categoria : %s\n"
+                   "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
+            Sleep(1000);
+        }
 
     }
     fclose(arq);

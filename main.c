@@ -59,7 +59,11 @@ int teste(){
             Saldo(&x);
         }
         if (v==2){
-            imprime_arq();
+            // variavel que representa o Qmes
+            int Qmes;
+            printf("Digite quantos meses gostaria de ver: ");
+            scanf("%d",&Qmes);
+            imprime_arq(Qmes);
         }
         if (v==3){
             Transferencia();
