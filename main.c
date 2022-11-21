@@ -12,15 +12,18 @@
 void Saldo(int *x){
     //altera o valor de x se for 1 para 0 e 0 para 1 (INTERRUPTOR DESLIGA E LIGA)
     *(x) = (*x==1)? 0:1;
+    system("cls");
 }
 
 int teste(){
+    system("cls");
+
     //valores padroes de formato da carteira, inicialmente ela estara escondida
 
     char escolha ='0';
     int x = 0;
 
-    //principal
+    // principal
 
     while(escolha!='9'){
         double saldo = procura_saldo();
@@ -30,7 +33,7 @@ int teste(){
         strcpy(mostra[2],"MOSTRAR SALDO");
         strcpy(mostra[3],"ESCONDER SALDO");
 
-        char delimitador[]={'1','2','3','4','5','9'};
+        char delimitador[]= {'1','2','3','4','5','9'};
 
         //este print vai ser alterado ao chamar a funcao SALDO, atraves da variavel x que sera alterada, resultando em um print diferente
         //obs (FLUSH = limpa os dados nao usados, resolve o erro do scanf nao sendo lido)
@@ -75,6 +78,7 @@ int teste(){
             scanf("%d",&escolha);
 
             if (escolha==2){
+
                 int Qmes;
                 char tipocategoria[30];
 
