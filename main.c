@@ -2,6 +2,13 @@
 #include "string.h"
 #include "funcoes.h"
 
+// o programa principal esta no main.c, maioria das atividades relacionadas com arquivos
+// estao armazenadas no funcoes.h, o main.c esta apenas printando o menu interativo
+
+
+// o arquivo esta pronto com datas de meses passados para que possa fazer o teste
+// da funcao extrato por mes...
+
 void Saldo(int *x){
     //altera o valor de x se for 1 para 0 e 0 para 1 (INTERRUPTOR DESLIGA E LIGA)
     *(x) = (*x==1)? 0:1;
@@ -59,11 +66,30 @@ int teste(){
             Saldo(&x);
         }
         if (v==2){
-            // variavel que representa o Qmes
-            int Qmes;
-            printf("Digite quantos meses gostaria de ver: ");
-            scanf("%d",&Qmes);
-            imprime_arq(Qmes);
+            // variavel que representa o Qmes, mostra ates Qmeses do extrato
+            // por exemplo, data atual --> 09/22 e qmes = 3
+            // os dados do extrato serao do 06/22 ate 09/22
+
+            int escolha;
+            printf("Escolha uma das opcoes abaixo: \n\n[1] - EXTRATO COMPLETO\n[2] - EXTRATO COM FILTRO\n:");
+            scanf("%d",&escolha);
+
+            if (escolha==2){
+                int Qmes;
+                char tipocategoria[30];
+
+                printf("\nDigite quantos meses gostaria de ver no extrato: ");
+                scanf("%d",&Qmes);
+
+                printf("\nDigite a categoria que gostaria de ver no extrato \n( opcional, caso deseje todas categorias no extrato digite 1 )\n: ");
+                scanf("%s",tipocategoria);
+                strupr(tipocategoria);
+
+                imprime_arq(Qmes,0,tipocategoria);
+            }
+            else{
+                imprime_arq(1,1,"");
+            }
         }
         if (v==3){
             Transferencia();

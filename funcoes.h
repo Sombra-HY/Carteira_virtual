@@ -3,7 +3,8 @@
 #include <time.h>
 #include <Windows.h>
 
-// funcao que verifica se uma valor esta dentro de uma vetor, similar ao "in" do python, retornando verdadeiro ou falso se o valor tiver na lista, 1 ou 0.
+// funcao que verifica se uma valor esta dentro de uma vetor, similar ao "in" do python,
+// retornando verdadeiro ou falso se o valor tiver na lista, 1 ou 0.
 struct dados {
     double saldo;
     double desconto;
@@ -151,7 +152,8 @@ void adicionar_rea(int valor){
     }
 }
 
-void imprime_arq(int Qmes){
+void imprime_arq(int Qmes, int completo, char *tipocategoria){
+    printf("%s",tipocategoria);
     struct tm *p;
     time_t seconds;
     time(&seconds);
@@ -173,21 +175,50 @@ void imprime_arq(int Qmes){
     // So pode imprimir valores em que o  arquivo (mes + (ano * 12)) >= atual (mes + (ano * 12) - Qmes)
     // neste caso os dias nao sao contabilizados
 
-    while(fread(&valor, 1, sizeof(valor), arq)){
-        if ((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes){
+    if(completo){
+        while(fread(&valor, 1, sizeof(valor), arq)){
+
             printf("\n_____________%d/%d/%d_____________\n"
-                   "%c %.2lf\n"
-                   "categoria : %s\n"
-                   "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
+                       "%c %.2lf\n"
+                       "categoria : %s\n"
+                       "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
             Sleep(1000);
         }
-
     }
+    else{
+        if(tipocategoria[0]=='1'){
+            while(fread(&valor, 1, sizeof(valor), arq)){
+                if ((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes){
+                    printf("\n_____________%d/%d/%d_____________\n"
+                           "%c %.2lf\n"
+                           "categoria : %s\n"
+                           "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
+                    Sleep(1000);
+                }
+
+            }
+        }
+        else{
+            while(fread(&valor, 1, sizeof(valor), arq)){
+                int vefstr = strcmp(valor.categoria,tipocategoria);
+                if (((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes) && (vefstr==0)){
+                    printf("\n_____________%d/%d/%d_____________\n"
+                           "%c %.2lf\n"
+                           "categoria : %s\n"
+                           "descricao: %s\n[disponivel: R$ %.2lf]\n",valor.dia,valor.mes,valor.ano ,(valor.desconto>0?'+':' '),valor.desconto,valor.categoria,valor.descricao,valor.saldo);
+                    Sleep(1000);
+                }
+
+            }
+        }
+    }
+
     fclose(arq);
     int i = 0;
+    printf("\nCarregando");
     while (i++ < 3) {
         Sleep(1000); // Sleep 1 segundo
-        printf(". ");
+        printf(".");
     }
     printf("\n");
 }
