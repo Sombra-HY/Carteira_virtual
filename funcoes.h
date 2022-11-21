@@ -3,8 +3,7 @@
 #include <time.h>
 #include <Windows.h>
 
-// funcao que verifica se uma valor esta dentro de uma vetor, similar ao "in" do python,
-// retornando verdadeiro ou falso se o valor tiver na lista, 1 ou 0.
+// formato dos dados no arquivo em binario
 struct dados {
     double saldo;
     double desconto;
@@ -20,6 +19,8 @@ struct dados {
     char descricao[200];
 };
 
+// funcao que verifica se uma valor esta dentro de uma vetor, similar ao "in" do python,
+// retornando verdadeiro ou falso se o valor tiver na lista, 1 ou 0.
 int inCHAR (char valor,char *vetor,int tamVetor){
     int booleano = 0;
     for (int i = 0; i < tamVetor; ++i) {
@@ -64,10 +65,15 @@ double procura_saldo() {
         fclose(arq);
 
         return valor.saldo;
+        // retrona o valor do saldo atual
     }
 }
+// adicionar_ rea coloca ou tira dinheiro do arquivo, ele recebe
+// o parametro inteiro, se for negativo ele vai tirar se for positivo ele vai
+// adicionar saldo na conta
 
 void adicionar_rea(int valor){
+    //formato dos dados
     struct dados {
         double saldo;
         double desconto;
@@ -83,12 +89,14 @@ void adicionar_rea(int valor){
         char descricao[200];
     };
 
+    // pegando valores de horario atual
     struct tm *p;
     time_t seconds;
     time(&seconds);
     p = localtime(&seconds);
     struct dados dados;
 
+    // Aqui vai adiconar dinheiro
     if (valor==1){
 
         printf("\n%s","Digite um valor para adicionar: ");
@@ -115,10 +123,12 @@ void adicionar_rea(int valor){
         dados.minuto = p->tm_min;
         dados.segundo = p->tm_sec;
 
+        //escrevendo na ultima linha em binario
         FILE *arq = fopen("arquivo.txt", "ab");
         fwrite(&dados, sizeof(dados), 1, arq);
         fclose(arq);
     }
+    // arqui vai tira dinheiro
     else{
 
         printf("\n%s","Digite o valor do gasto: ");
@@ -146,11 +156,22 @@ void adicionar_rea(int valor){
         dados.minuto = p->tm_min;
         dados.segundo = p->tm_sec;
 
+        //escrevendo na ultima linha em binario
         FILE *arq = fopen("arquivo.txt", "ab");
         fwrite(&dados, sizeof(dados), 1, arq);
         fclose(arq);
     }
 }
+
+
+// imprime_arq printa os valores do arquivo conforme algun tipo de filtro
+// passado pelo main.c os parametros Qmes é a quantidade de mes anteriores a ser imprimido
+// completo é um parametro que define a orden em outros parametros, no caso se ele for 1 (ativado)
+// ele ignorara os valores como Qmes e imprimira todos componentes do arquivo.
+// tipocategoria é um parametro que faz ser imprimido apenas valores digitados
+// pelo usuario, no caso se for diferente de "1" ele imprimira todos valores
+// que tenha no arquivo com categoria == tipocategoria
+// caso seja "1" ele imprimira tudo...
 
 void imprime_arq(int Qmes, int completo, char *tipocategoria){
     printf("%s",tipocategoria);
@@ -178,6 +199,7 @@ void imprime_arq(int Qmes, int completo, char *tipocategoria){
     if(completo){
         while(fread(&valor, 1, sizeof(valor), arq)){
 
+            // SEM FILTRO
             printf("\n_____________%d/%d/%d_____________\n"
                        "%c %.2lf\n"
                        "categoria : %s\n"
@@ -185,8 +207,11 @@ void imprime_arq(int Qmes, int completo, char *tipocategoria){
             Sleep(1000);
         }
     }
+
+    // verificacao do categoria == "1", faz imprimir tudo, mas apenas com o filtro de mes ativado
     else{
         if(tipocategoria[0]=='1'){
+            //FILTRO MES
             while(fread(&valor, 1, sizeof(valor), arq)){
                 if ((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes){
                     printf("\n_____________%d/%d/%d_____________\n"
@@ -198,9 +223,13 @@ void imprime_arq(int Qmes, int completo, char *tipocategoria){
 
             }
         }
+
+        // esse print o filtro de meses e de categoria estao ativados
+        // o extrato tera dois filtros
         else{
             while(fread(&valor, 1, sizeof(valor), arq)){
                 int vefstr = strcmp(valor.categoria,tipocategoria);
+                // FILTRO MES E CATEGORIA
                 if (((valor.mes + (valor.ano)*12) >= (dados.mes + (dados.ano * 12))-Qmes) && (vefstr==0)){
                     printf("\n_____________%d/%d/%d_____________\n"
                            "%c %.2lf\n"
@@ -215,6 +244,8 @@ void imprime_arq(int Qmes, int completo, char *tipocategoria){
 
     fclose(arq);
     int i = 0;
+
+    //pequeno timer durante o processo
     printf("\nCarregando");
     while (i++ < 3) {
         Sleep(1000); // Sleep 1 segundo
@@ -223,6 +254,9 @@ void imprime_arq(int Qmes, int completo, char *tipocategoria){
     printf("\n");
 }
 
+// A tranferecia sera solicitado pelo usuario os valores do favorecido, ou seja
+// de quem recebera o dinheiro assim como o "pix", apos isso ele removera o dinheiro
+// e salvara no arquivo o dinheiro retirado, e salvara na categoria TRANFERENCIA por padrao
 int Transferencia(){
     struct dados {
         double saldo;
@@ -254,6 +288,8 @@ int Transferencia(){
     dados.saldo = procura_saldo() + dados.desconto;
 
     strcpy(dados.categoria, "TRANSFERENCIA");
+    // TIPO DE CATEGORIA PADRAO == TRANSFERENCIA
+
     strupr(dados.categoria);
     fflush(stdin);
 
@@ -265,6 +301,7 @@ int Transferencia(){
     };
     struct conta valor;
 
+    // entradas que serao descritas na secao descriacao do arquivo
     printf("Digite o nome do favorecido: ");
     scanf("%[^\n]s", &valor.nome);
     fflush(stdin);
@@ -282,6 +319,7 @@ int Transferencia(){
     dados.minuto = p->tm_min;
     dados.segundo = p->tm_sec;
 
+    // Escrita
     FILE *arq = fopen("arquivo.txt", "ab");
     fwrite(&dados, sizeof(dados), 1, arq);
     fclose(arq);
