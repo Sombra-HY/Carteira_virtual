@@ -28,10 +28,7 @@
 //    return 1;
 //}
 
-int Transferencia(){
-    printf("Transferencia");
-    return 1;
-}
+
 
 void Saldo(int *x){
     //altera o valor de x se for 1 para 0 e 0 para 1 (INTERRUPTOR DESLIGA E LIGA)

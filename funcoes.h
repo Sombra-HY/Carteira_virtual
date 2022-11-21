@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include "string.h"
 #include <time.h>
 #include <Windows.h>
 
@@ -177,4 +178,68 @@ void imprime_arq(){
         printf(". ");
     }
     printf("\n");
+}
+
+int Transferencia(){
+    struct dados {
+        double saldo;
+        double desconto;
+
+        int dia;
+        int mes;
+        int ano;
+        int hora;
+        int minuto;
+        int segundo;
+
+        char categoria[30];
+        char descricao[200];
+    };
+
+    struct tm *p;
+    time_t seconds;
+    time(&seconds);
+    p = localtime(&seconds);
+
+    struct dados dados;
+
+    printf("%s","\n Digite a quantia a ser transferiada: ");
+    scanf("%lf", &dados.desconto);
+    dados.desconto *=-1;
+    fflush(stdin);
+
+    dados.saldo = procura_saldo() + dados.desconto;
+
+    strcpy(dados.categoria, "TRANSFERENCIA");
+    fflush(stdin);
+
+    struct dados conta;
+
+    struct conta{
+        char nome[30];
+        char pix[30];
+    };
+    struct conta valor;
+
+    printf("Digite o nome do favorecido: ");
+    scanf("%[^\n]s", &valor.nome);
+    fflush(stdin);
+
+    printf("Digite o PIX: ");
+    scanf("%s", &valor.pix);
+    fflush(stdin);
+    sprintf(dados.descricao, "nome do favorecido: %s\nPIX: %s",valor.nome,valor.pix);
+
+    // data atual
+    dados.dia = p->tm_mday;
+    dados.mes = p->tm_mon + 1;
+    dados.ano = p->tm_year + 1900;
+    dados.hora = p->tm_hour;
+    dados.minuto = p->tm_min;
+    dados.segundo = p->tm_sec;
+
+    FILE *arq = fopen("arquivo.txt", "ab");
+    fwrite(&dados, sizeof(dados), 1, arq);
+    fclose(arq);
+    return 1;
 }
