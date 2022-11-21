@@ -90,18 +90,19 @@ void adicionar_rea(int valor){
 
     if (valor==1){
 
-        printf("%s","\n Digite um valor para adicionar: ");
+        printf("\n%s","Digite um valor para adicionar: ");
 
         scanf("%lf", &dados.desconto);
         fflush(stdin);
 
         dados.saldo = procura_saldo()+dados.desconto;
 
-        printf("digite uma categoria: \n");
+        printf("Digite uma categoria: \n");
         scanf("%s", &dados.categoria);
+        strupr(dados.categoria);
         fflush(stdin);
 
-        printf("digite uma descricao (Opcional): \n");
+        printf("Digite uma descricao (Opcional): \n");
         scanf("%[^\n]s", &dados.descricao);
         fflush(stdin);
 
@@ -119,7 +120,7 @@ void adicionar_rea(int valor){
     }
     else{
 
-        printf("%s","\n Digite o valor do gasto: ");
+        printf("\n%s","Digite o valor do gasto: ");
 
         scanf("%lf", &dados.desconto);
         dados.desconto *=-1;
@@ -127,11 +128,12 @@ void adicionar_rea(int valor){
 
         dados.saldo = procura_saldo() + dados.desconto;
 
-        printf("digite a categoria: \n");
+        printf("Digite a categoria: \n");
         scanf("%s", &dados.categoria);
+        strupr(dados.categoria);
         fflush(stdin);
 
-        printf("digite a descricao (Opcional): \n");
+        printf("Digite a descricao (Opcional): \n");
         scanf("%[^\n]s", &dados.descricao);
         fflush(stdin);
 
@@ -203,7 +205,7 @@ int Transferencia(){
 
     struct dados dados;
 
-    printf("%s","\n Digite a quantia a ser transferiada: ");
+    printf("%s","\nDigite a quantia a ser transferiada: ");
     scanf("%lf", &dados.desconto);
     dados.desconto *=-1;
     fflush(stdin);
@@ -211,6 +213,7 @@ int Transferencia(){
     dados.saldo = procura_saldo() + dados.desconto;
 
     strcpy(dados.categoria, "TRANSFERENCIA");
+    strupr(dados.categoria);
     fflush(stdin);
 
     struct dados conta;

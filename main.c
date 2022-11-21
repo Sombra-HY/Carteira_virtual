@@ -2,34 +2,6 @@
 #include "string.h"
 #include "funcoes.h"
 
-
-
-
-
-//int Extrato(){
-//
-//    int x;
-//    char cat[30];
-//
-//    printf("----------------Extrato------------------\n\nEscolha uma das opcoes abaixo:\n\n");
-//    printf("[1] - Escolher Categoria - (1 mes)\n[2] - Completo - (12 mes)\n:");
-//    scanf("%d",&x);
-//    if(x==1){
-//        printf("escolha uma categoria: ");
-//        scanf("%s",&cat);
-//
-//        //funcao que chama que entrega o extrato
-//        printf("-------------%s---------------\n",cat);
-//    }
-//    else if(x==2){
-//
-//    }
-//
-//    return 1;
-//}
-
-
-
 void Saldo(int *x){
     //altera o valor de x se for 1 para 0 e 0 para 1 (INTERRUPTOR DESLIGA E LIGA)
     *(x) = (*x==1)? 0:1;
